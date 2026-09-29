@@ -26,7 +26,7 @@ export default function Hero() {
         <p className="hero__subtitle">
           Explore the world&apos;s most exhilarating supercars and superbikes.
           <br className="hero__subtitle-br" />
-          Unmatched performance. Unrivaled design. One destination.
+          Unmatched performance. Unrivaled design. Dream destination.
         </p>
 
         <div className="hero__ctas">
