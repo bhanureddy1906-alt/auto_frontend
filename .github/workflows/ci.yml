@@ -29,12 +29,22 @@ jobs:
           repository: bhanureddy1906-alt/auto-frontend-config
           token: ${{ secrets.CONFIG_REPO_TOKEN }}
           path: config
-      - name: Update deployment.yaml
+        - name: Update deployment.yaml
         run: |
           cd config
           git pull --rebase origin main
-          sed -i "s|image:.*auto-frontend:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/auto-frontend:${{ github.sha }}|g" deployment.yaml
+          echo "Listing files in config repo:"
+          ls -R
+          FILE=$(find . -name "deployment.yaml" -o -name "deployment.yml" | head -n 1)
+          echo "Found file: $FILE"
+          if [ -z "$FILE" ]; then
+            echo "ERROR: deployment.yaml not found!"
+            exit 1
+          fi
+          sed -i "s|image:.*auto-frontend:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/auto-frontend:${{ github.sha }}|g" "$FILE"
+          cat "$FILE"
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git commit -am "Deploy ${{ github.sha }}" || echo "No changes"
+          git add "$FILE"
+          git commit -m "Deploy ${{ github.sha }}" || echo "No changes"
           git push origin main
