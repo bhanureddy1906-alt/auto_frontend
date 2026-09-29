@@ -25,7 +25,7 @@ jobs:
 
       - uses: docker/build-push-action@v6
         with:
-          context: .
+          context:.
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/auto-frontend:${{ github.sha }}
 
@@ -37,11 +37,11 @@ jobs:
           path: config
 
       - name: Update deployment.yaml
-    run: |
-      cd config
-      git pull --rebase origin main
-      sed -i "s|image: .*auto-frontend:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/auto-frontend:${{ github.sha }}|g" deployment.yaml
-      git config user.name "github-actions"
-      git config user.email "actions@github.com"
-      git commit -am "Deploy ${{ github.sha }}" || echo "No changes"
-      git push origin main
+        run: |
+          cd config
+          git pull --rebase origin main
+          sed -i "s|image:.*auto-frontend:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/auto-frontend:${{ github.sha }}|g" deployment.yaml
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git commit -am "Deploy ${{ github.sha }}" || echo "No changes"
+          git push origin main
