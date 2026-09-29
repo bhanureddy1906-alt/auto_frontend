@@ -20,7 +20,7 @@ export default function Hero() {
         <h1 className="hero__title">
           Find Your Perfect
           <br />
-          <span className="gradient-text">Super Machine</span>
+          <span className="gradient-text">Hyper Machine</span>
         </h1>
 
         <p className="hero__subtitle">
