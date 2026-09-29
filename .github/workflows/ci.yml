@@ -2,40 +2,47 @@ name: CI
 on:
   push:
     branches: [main]
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+
       - run: npm ci
       - run: npm run lint --if-present
       - run: npm run build
+
       - uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/auto-frontend:${{ github.sha }}
+          tags: "${{ secrets.DOCKERHUB_USERNAME }}/auto-frontend:${{ github.sha }}"
+
       - name: Checkout config repo
         uses: actions/checkout@v4
         with:
           repository: bhanureddy1906-alt/auto-frontend-config
           token: ${{ secrets.CONFIG_REPO_TOKEN }}
           path: config
-        - name: Update deployment.yaml
+
+      - name: Update deployment.yaml
         run: |
           cd config
           git pull --rebase origin main
           echo "Listing files in config repo:"
           ls -R
-          FILE=$(find . -name "deployment.yaml" -o -name "deployment.yml" | head -n 1)
+          FILE=$(find. -name "deployment.yaml" -o -name "deployment.yml" | head -n 1)
           echo "Found file: $FILE"
           if [ -z "$FILE" ]; then
             echo "ERROR: deployment.yaml not found!"
