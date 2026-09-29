@@ -40,14 +40,9 @@ jobs:
         run: |
           cd config
           git pull --rebase origin main
-          echo "Listing files in config repo:"
           ls -R
-          FILE=$(find. -name "deployment.yaml" -o -name "deployment.yml" | head -n 1)
-          echo "Found file: $FILE"
-          if [ -z "$FILE" ]; then
-            echo "ERROR: deployment.yaml not found!"
-            exit 1
-          fi
+          FILE="dev/deployment.yaml"
+          echo "Updating $FILE"
           sed -i "s|image:.*auto-frontend:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/auto-frontend:${{ github.sha }}|g" "$FILE"
           cat "$FILE"
           git config user.name "github-actions"
