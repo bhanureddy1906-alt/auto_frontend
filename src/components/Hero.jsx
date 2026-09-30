@@ -14,7 +14,7 @@ export default function Hero() {
       <div className="hero__content animate-fade">
         <div className="hero__badge animate-slide-up">
           <span className="hero__badge-dot" />
-          <span>2026 Hyper Collection Now Available</span>
+          <span>2026 Hyper Classic Collection Now Available</span>
         </div>
 
         <h1 className="hero__title">
